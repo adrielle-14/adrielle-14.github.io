@@ -1,4 +1,4 @@
-name: Refine stack note
+name: Refine professional contact text
 
 on:
   push:
@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Simplify stack note
+      - name: Update contact text
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          old = '<div class="callout reveal" style="margin-top:18px"><strong>Como apresento meu domínio:</strong> destaco como core expertise as tecnologias que implementei, operei e usei em incidentes; separo das ferramentas em que tenho atuação prática/intermediária ou contato pontual. Isso mantém o portfólio tecnicamente honesto e evita transformar a stack em uma lista inflada de buzzwords.</div>'
-          new = '<p class="stack-note reveal" style="margin-top:18px"><strong style="color:var(--accent)">Stack baseada em experiência prática:</strong> construída a partir de ambientes reais de Segurança, Infraestrutura, Cloud e DevSecOps.</p>'
+          old = '<p>Tenho interesse em oportunidades que valorizem um perfil híbrido e prático, especialmente Cyber Security, SecOps, Blue Team, Security Engineering, Cloud Security, DevSecOps e Platform Security em ambientes críticos ou regulados.</p>'
+          new = '<p>Atuo em contextos que valorizam um perfil híbrido e prático, conectando Cyber Security, SecOps, Blue Team, Security Engineering, Cloud Security, DevSecOps e Platform Security em ambientes críticos ou regulados.</p>'
           if old not in s:
               raise SystemExit(0)
           p.write_text(s.replace(old, new, 1), encoding='utf-8')
@@ -30,5 +30,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Simplify stack experience note"
+          git commit -m "Make professional contact text timeless"
           git push
