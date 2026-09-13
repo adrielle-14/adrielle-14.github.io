@@ -1,4 +1,4 @@
-name: Refine portfolio hero
+name: Add pfSense to portfolio
 
 on:
   push:
@@ -12,16 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Update hero subtitle
+      - name: Add pfSense references
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          old = '<div class="hero-role">Cyber Security & Infrastructure | Cloud • DevSecOps • SecOps</div>'
-          new = '<div class="hero-role">Portfólio Profissional</div>'
-          if old in s:
-              s = s.replace(old, new, 1)
+          s = s.replace('HAProxy, nginx, Fortigate e balanceamento','HAProxy, nginx, Fortigate, pfSense e balanceamento',1)
+          s = s.replace('<span>Fortigate</span><span>Tenable</span>','<span>Fortigate</span><span>pfSense</span><span>Tenable</span>',1)
           p.write_text(s, encoding='utf-8')
           PY
       - name: Commit change
@@ -30,5 +28,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Refine portfolio hero subtitle"
+          git commit -m "Add pfSense to network security stack"
           git push
