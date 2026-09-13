@@ -1,4 +1,4 @@
-name: Remove Data Lake from stack
+name: Refine stack description
 
 on:
   push:
@@ -12,16 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Remove Data Lake from observability stack
+      - name: Refine stack section description
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          old = '<span>Data Lake</span>'
+          old = 'Organizada por camada e por experiência prática. A ideia não é listar palavras-chave, e sim mostrar onde minha atuação acontece no dia a dia sem expor topologia, versões, clientes ou configurações internas.'
+          new = 'Organizada por camada e experiência prática, refletindo as tecnologias e ambientes com os quais atuo no dia a dia, sem expor informações sensíveis de clientes, arquitetura ou configurações internas.'
           if old not in s:
-              raise SystemExit('Data Lake tag not found')
-          p.write_text(s.replace(old, '', 1), encoding='utf-8')
+              raise SystemExit('Stack description not found')
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
           PY
       - name: Commit change
         run: |
@@ -29,5 +30,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Remove Data Lake from stack"
+          git commit -m "Refine stack section description"
           git push
