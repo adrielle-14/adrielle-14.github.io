@@ -1,4 +1,4 @@
-name: Fix PCI DSS case content
+name: Add network and Microsoft stack
 
 on:
   push:
@@ -12,27 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fix PCI DSS case
+      - name: Add VPC VLAN and Microsoft 365
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          replacements = {
-              'Atuação direta na renovação da certificação e na evolução dos controles técnicos e documentais exigidos pela nova versão.': 'Responsável pela condução do PCI DSS, incluindo renovação da certificação, transição da versão 3.2 para 4.0, adequação do ambiente, criação de evidências e documentação, revisão de controles técnicos e acompanhamento das exigências do padrão.',
-              '<li>Responsabilidade compartilhada com provedores</li>': '<li>Adequação do ambiente aos requisitos do PCI DSS 4.0</li><li>Criação e organização de evidências e documentação de auditoria</li>',
-              '<li>Hardening e menor privilégio</li>': '<li>Hardening, menor privilégio e revisão de controles técnicos</li>',
-              '<li>Varreduras, retestes e disputa técnica de achados</li>': '<li>Acompanhamento de pentests independentes exigidos pelo PCI DSS</li><li>Análise, priorização, correção e reteste dos achados identificados</li>',
-              '<li>Evidências, conscientização e trilha de auditoria</li>': '<li>Acompanhamento de planos de ação e auditoria</li>',
-              '<div class="case-result"><strong>Resultado:</strong> certificação renovada com controles e evidências adequados à nova versão do padrão.</div>': '<div class="case-result"><strong>Resultado:</strong> certificação renovada, ambiente adequado aos novos requisitos e processo de evidências e controles estruturado para auditoria.</div>'
-          }
+          replacements = [
+              ('DNS, TLS/HTTPS, SSH e segurança de rede', 'VPC, VLAN, DNS, TLS/HTTPS, SSH e segurança de rede'),
+              ('<span>IBM Cloud</span><span>Linux</span>', '<span>IBM Cloud</span><span>VPC</span><span>VLAN</span><span>Linux</span>'),
+              ('<span>Google Workspace Security</span>', '<span>Google Workspace Security</span><span>Microsoft 365 Security</span>'),
+              ('<span>Google Workspace</span><span>Runbooks</span>', '<span>Google Workspace</span><span>Microsoft 365</span><span>Runbooks</span>')
+          ]
           changed = False
-          for old, new in replacements.items():
-              if old in s:
+          for old, new in replacements:
+              if old in s and new not in s:
                   s = s.replace(old, new, 1)
                   changed = True
           if not changed:
-              raise SystemExit('No PCI DSS case text matched')
+              raise SystemExit('No matching portfolio text found')
           p.write_text(s, encoding='utf-8')
           PY
       - name: Commit change
@@ -41,5 +39,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Fix PCI DSS case ownership details"
+          git commit -m "Add VPC VLAN and Microsoft 365 to portfolio"
           git push
