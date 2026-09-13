@@ -1,4 +1,4 @@
-name: Complete AWS cloud stack
+name: Remove Data Lake from stack
 
 on:
   push:
@@ -12,17 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Add AWS services to cloud stack card
+      - name: Remove Data Lake from observability stack
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          old = '<div class="card stack-group reveal"><h3>Cloud, Datacenter & Virtualization</h3><div class="stack"><span>AWS</span><span>Amazon VPC</span><span>Amazon EC2</span><span>Amazon S3</span><span>Linode</span><span>IBM Cloud</span><span>VMware vCenter</span><span>VMware</span><span>Hyper-V</span></div></div>'
-          new = '<div class="card stack-group reveal"><h3>Cloud, Datacenter & Virtualization</h3><div class="stack"><span>AWS</span><span>Amazon VPC</span><span>Amazon EC2</span><span>Amazon S3</span><span>Amazon ECR</span><span>Route 53</span><span>Amazon OpenSearch Service</span><span>Linode</span><span>IBM Cloud</span><span>VMware vCenter</span><span>VMware</span><span>Hyper-V</span></div></div>'
+          old = '<span>Data Lake</span>'
           if old not in s:
-              raise SystemExit('Cloud stack card not found')
-          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+              raise SystemExit('Data Lake tag not found')
+          p.write_text(s.replace(old, '', 1), encoding='utf-8')
           PY
       - name: Commit change
         run: |
@@ -30,5 +29,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Complete AWS cloud stack card"
+          git commit -m "Remove Data Lake from stack"
           git push
